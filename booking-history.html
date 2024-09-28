@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+      /*  nav ul li a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }*/
+
+        nav ul li a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .filters {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filters label {
+            font-weight: bold;
+        }
+
+        .filters input,
+        .filters select {
+            padding: 5px;
+            margin-right: 15px;
+        }
+
+        #historyContainer {
+            margin-top: 20px;
+        }
+
+        .booking-entry {
+            margin-bottom: 20px;
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            line-height: 1.8;
+        }
+
+        .booking-entry h3 {
+            margin-top: 0;
+            color: #444;
+        }
+
+        .button {
+            padding: 10px;
+           // background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        
+
+        .no-history {
+            text-align: center;
+            color: red;
+            font-size: 18px;
+        }
+
+        .cancel-button {
+            background-color: red;
+            margin-top: 10px;
+        }
+
+        .cancel-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+
+<body background="">
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html"><B>Home</B></a></li>
+                <li><a href="trainsearch.html"><B>Train Search</B></a></li>
+                <li><a href="booking-history.html"><B>Booking History</B></a></li>
+            </ul>
+        </nav>
+
+        <h1>Your Booking History</h1>
+
+        <div class="filters">
+            <label for="trainFilter"><B>Filter by Train Name</B></label>
+            <input type="text" id="trainFilter" placeholder="Enter Train Name">
+
+            <label for="dateFilter"><B>Filter by Date</B></label>
+            <input type="date" id="dateFilter">
+
+            <label for="statusFilter"><B>Filter by Status</B></label>
+            <select id="statusFilter">
+                <option value="">All</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+
+            <button class="button" onclick="filterHistory()"><B>Search</B></button>
+            <button class="button" onclick="resetFilters()"><B>Reset Filters</B></button>
+        </div>
+
+        <div id="historyContainer"></div>
+        <button class="button" onclick="window.location.href='index.html'"><B>Back to Home</B></button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const historyContainer = document.getElementById("historyContainer");
+
+            const bookingHistory = localStorage.getItem("bookingHistory") || "";
+
+            const formattedHistory = formatHistory(bookingHistory);
+            historyContainer.innerHTML = formattedHistory.length > 0 ? formattedHistory : "<p class='no-history'>No booking history found.</p>";
+        });
+
+        function formatHistory(history) {
+            if (!history) {
+                return "<p class='no-history'>No booking history found.</p>";
+            }
+
+            const historyEntries = history.split('|').filter(entry => entry.trim() !== '');
+
+            return historyEntries.map((entry, index) => {
+                const details = entry.split(/[,/]+/); 
+
+                const trainDetails = details[0]; 
+                const passengerDetails = details.slice(1).join('<br>'); 
+
+                return `
+                    <div class="booking-entry">
+                        <h3>Booking ${index + 1}</h3>
+                        <p>${trainDetails}</p>
+                        <p>${passengerDetails}</p>
+                        <button class="button cancel-button" onclick="cancelTicket(${index})">Cancel Ticket</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterHistory() {
+            const trainFilter = document.getElementById("trainFilter").value.toLowerCase();
+            const dateFilter = document.getElementById("dateFilter").value;
+            const statusFilter = document.getElementById("statusFilter").value;
+
+            const bookingHistory = localStorage.getItem("bookingHistory") || "";
+            let historyEntries = bookingHistory.split('|').filter(entry => entry.trim() !== '');
+
+            if (trainFilter) {
+                historyEntries = historyEntries.filter(entry => entry.toLowerCase().includes(trainFilter));
+            }
+
+            if (dateFilter) {
+                const date = new Date(dateFilter).toISOString().split('T')[0];
+                historyEntries = historyEntries.filter(entry => entry.includes(date));
+            }
+
+            
+            if (statusFilter) {
+                historyEntries = historyEntries.filter(entry => entry.toLowerCase().includes(statusFilter.toLowerCase()));
+            }
+
+            const formattedHistory = formatHistory(historyEntries.join('|'));
+            document.getElementById("historyContainer").innerHTML = formattedHistory.length > 0 ? formattedHistory : "<p class='no-history'>No matching bookings found.</p>";
+        }
+
+        function resetFilters() {
+            document.getElementById("trainFilter").value = '';
+            document.getElementById("dateFilter").value = '';
+            document.getElementById("statusFilter").value = '';
+            filterHistory(); 
+        }
+
+        function cancelTicket(index) {
+            if (confirm("Are you sure you want to cancel this ticket?")) {
+                const bookingHistory = localStorage.getItem("bookingHistory") || "";
+                let historyEntries = bookingHistory.split('|').filter(entry => entry.trim() !== '');
+
+                historyEntries.splice(index, 1);
+
+                localStorage.setItem("bookingHistory", historyEntries.join('|'));
+
+                const historyContainer = document.getElementById("historyContainer");
+                historyContainer.innerHTML = formatHistory(historyEntries.join('|'));
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body background="https://images.pexels.com/photos/3695238/pexels-photo-3695238.jpeg?cs=srgb&dl=pexels-damir-mijailovic-1921088-3695238.jpg&fm=jpg">
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html"><B>Home</B></a></li>
+                <li><a href="trainsearch.html"><B>Train Search</B></a></li>
+                <li><a href="booking-history.html"><B>Booking History</B></a></li>
+            </ul>
+        </nav>
+
+        <h1>Train Search</h1>
+        <form id="trainSearchForm" onsubmit="event.preventDefault(); searchTrains();">
+            <label for="source"><B>Origin</B></label>
+            <input type="text" id="source" required>
+
+            <label for="destination"><B>Destination</B></label>
+            <input type="text" id="destination" required>
+
+            <label for="travelDate"><B>Date</B></label>
+            <input type="date" id="dateInputId" required>
+
+
+            <button type="submit"><B>Search Trains</B></button>
+        </form>
+
+        <div id="searchResults" class="hidden">
+            <h2>Available Trains</h2>
+            <div id="trainList"></div>
+        </div>
+    </div>
+
+    <script>
+        const trains = [
+            {
+                name: "Express 101",
+                source: "cityA",
+                destination: "cityB",
+                availableSeats: { sleeper: 20, ac: 10 },
+                travelDates: ["2024-09-27", "2024-09-28"],
+                stations: ["cityA", "cityC", "cityD", "cityB"],
+            },
+            {
+                name: "Fast Express",
+                source: "cityA",
+                destination: "cityB",
+                availableSeats: { sleeper: 15, ac: 5 },
+                travelDates: ["2024-09-28", "2024-09-29"],
+                stations: ["cityA", "cityE", "cityB"],
+            },
+            {
+                name: "Night Rider Express",
+                source: "cityC",
+                destination: "cityD",
+                availableSeats: { sleeper: 25, ac: 8 },
+                travelDates: ["2024-09-27", "2024-09-30"],
+                stations: ["cityC", "cityA", "cityD"],
+            },
+            {
+                name: "Morning Star",
+                source: "cityE",
+                destination: "cityF",
+                availableSeats: { sleeper: 10, ac: 20 },
+                travelDates: ["2024-09-28", "2024-09-30"],
+                stations: ["cityE", "cityF"],
+            },
+            {
+                name: "Coastal Express",
+                source: "cityG",
+                destination: "cityH",
+                availableSeats: { sleeper: 30, ac: 15 },
+                travelDates: ["2024-09-27", "2024-09-29"],
+                stations: ["cityG", "cityH"],
+            },
+            {
+                name: "Mountain Express",
+                source: "cityI",
+                destination: "cityJ",
+                availableSeats: { sleeper: 12, ac: 6 },
+                travelDates: ["2024-09-27", "2024-10-01"],
+                stations: ["cityI", "cityK", "cityJ"],
+            },
+            {
+                name: "Lake View Express",
+                source: "cityL",
+                destination: "cityM",
+                availableSeats: { sleeper: 20, ac: 10 },
+                travelDates: ["2024-09-28", "2024-09-30"],
+                stations: ["cityL", "cityM"],
+            },
+            {
+                name: "Sunrise Express",
+                source: "cityN",
+                destination: "cityO",
+                availableSeats: { sleeper: 18, ac: 12 },
+                travelDates: ["2024-09-29", "2024-10-01"],
+                stations: ["cityN", "cityO"],
+            },
+            {
+                name: "CityLink Express",
+                source: "cityP",
+                destination: "cityQ",
+                availableSeats: { sleeper: 20, ac: 8 },
+                travelDates: ["2024-09-27", "2024-09-28"],
+                stations: ["cityP", "cityR", "cityQ"],
+            },
+            {
+                name: "Heritage Express",
+                source: "cityS",
+                destination: "cityT",
+                availableSeats: { sleeper: 25, ac: 10 },
+                travelDates: ["2024-09-29", "2024-10-02"],
+                stations: ["cityS", "cityT"],
+            }
+        ];
+
+
+        function searchTrains() {
+            const sourceInput = document.getElementById("source").value;
+            const destinationInput = document.getElementById("destination").value;
+            const dateInput = document.getElementById("dateInputId").value;
+
+            const availableTrains = trains.filter(train => {
+                return (train.stations.includes(sourceInput) || train.source.toLowerCase() === sourceInput.toLowerCase()) &&
+                    (train.stations.includes(destinationInput) || train.destination.toLowerCase() === destinationInput.toLowerCase()) &&
+                    train.travelDates.includes(dateInput);
+            });
+
+            displayTrains(availableTrains, dateInput);
+        }
+
+        function displayTrains(availableTrains, dateInput) {
+            const resultContainer = document.getElementById("trainList");
+            resultContainer.innerHTML = "";
+		
+	    document.getElementById("searchResults").classList.remove("hidden");
+
+
+            if (availableTrains.length === 0) {
+                resultContainer.innerHTML = "<p>No trains available for the given route and date.</p>";
+                return;
+            }
+
+            availableTrains.forEach(train => {
+                const trainElement = document.createElement("div");
+                trainElement.classList.add("train");
+                trainElement.innerHTML = `
+            <h3>${train.name}</h3>
+            <p>Source: ${train.source}</p>
+            <p>Destination: ${train.destination}</p>
+            <p>Available Seats (Sleeper): ${train.availableSeats.sleeper}</p>
+            <p>Available Seats (AC): ${train.availableSeats.ac}</p>
+            <p>Stations: ${train.stations.join(", ")}</p>
+            <button onclick="selectTrain('${train.name}', '${train.source}', '${train.destination}', '${dateInput}', ${train.availableSeats.sleeper}, ${train.availableSeats.ac})">Select Train</button>
+        `;
+                resultContainer.appendChild(trainElement);
+            });
+
+            document.getElementById("searchResults").classList.remove("hidden");
+        }
+
+
+        function selectTrain(trainName, source, destination, date, availableSleeper, availableAC) {
+            const selectedTrain = `trainName:${trainName},source:${source},destination:${destination},date:${date},availableSleeper:${availableSleeper},availableAC:${availableAC}`;
+            localStorage.setItem("selectedTrain", selectedTrain);
+            window.open("booking.html", "_blank");
+        }
+
+
+        function setMinDate() {
+            const dateInput = document.getElementById("dateInputId");
+            const today = new Date();
+
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+            const day = String(today.getDate()).padStart(2, '0');
+
+            const todayString = `${year}-${month}-${day}`;
+
+            dateInput.min = todayString;  
+        }
+
+        
+        window.onload = setMinDate;
+
+    </script>
+</body>
+
+</html>

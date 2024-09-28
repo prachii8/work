@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Center content vertically and horizontally */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            background-color: #f0f8ff; /* Light background color */
+        }
+
+        .container {
+            
+            padding: 70px; /* Padding around the container */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            width: 300px; /* Fixed width */
+            text-align: center; /* Center text */
+        }
+
+        h1 {
+            color: #333; /* Darker color for the heading */
+        }
+
+        label {
+            display: block; /* Labels on their own lines */
+            margin-top: 10px; /* Space above labels */
+        }
+
+        input[type="text"],
+        input[type="month"],
+        input[type="password"] {
+            width: 100%; /* Full width inputs */
+            padding: 10px; /* Padding inside inputs */
+            margin-top: 5px; /* Space above inputs */
+            border-radius: 5px; /* Rounded corners for inputs */
+            border: 1px solid #ccc; /* Light border color */
+        }
+
+        button {
+            padding: 10px 20px; /* Button padding */
+            background-color: #4CAF50; /* Button background color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners for button */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-top: 15px; /* Space above button */
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Payment Details</h1>
+
+        <form onsubmit="event.preventDefault(); processPayment();">
+            <label for="cardNumber"><B>Card Number</B></label>
+            <input type="text" id="cardNumber" placeholder="Enter your card number" required pattern="[0-9]{16}"
+                title="Please enter a 16-digit card number">
+
+            <label for="expiryDate"><B>Expiry Date</B></label>
+            <input type="month" id="expiryDate" required>
+
+            <label for="cvv"><B>CVV</B></label>
+            <input type="password" id="cvv" placeholder="Enter CVV" required pattern="[0-9]{3}"
+                title="Enter a 3-digit CVV" maxlength="3">
+
+            <button type="submit"><B>Complete Payment</B></button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const expiryDateInput = document.getElementById("expiryDate");
+
+           
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+            const minExpiryDate = `${year}-${month}`;
+
+            expiryDateInput.min = minExpiryDate;
+        });
+
+        function processPayment() {
+            const cardNumber = document.getElementById("cardNumber").value;
+            const expiryDate = document.getElementById("expiryDate").value;
+            const cvv = document.getElementById("cvv").value;
+
+            if (!cardNumber || !expiryDate || !cvv) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            
+            setTimeout(() => {
+                alert("Payment Successful! Booking Confirmed.");
+                window.location.href = "confirmation.html"; 
+            }, 1000); 
+        }
+    </script>
+
+</body>
+
+</html>

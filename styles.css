@@ -1,0 +1,253 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    background-repeat:no-repeat;
+height:80vh;
+width:80vw;
+    background: url('https://images.pexels.com/photos/3695238/pexels-photo-3695238.jpeg?cs=srgb&dl=pexels-damir-mijailovic-1921088-3695238.jpg&fm=jpg')
+    background-size: cover;
+    width:100%;
+   }
+
+nav {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+text-align:center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #333;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input, select, button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Train List Styles */
+.train {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.train h3 {
+    margin: 0;
+}
+
+/* Booking History Styles */
+.booking {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Back Button Styles */
+.back-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Filter Styles */
+#search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Confirmation Page Styles */
+.confirmation {
+    text-align: left;
+}
+
+.confirmation p {
+    margin: 5px 0;
+}
+
+
+.hidden {
+    display: none;
+}
+
+
+
+
+
+.passenger {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+.train-details, .passenger-details {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.train-details h2, .passenger-details h2 {
+    color: #007bff;
+}
+
+.passenger {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.passenger h3 {
+    margin-top: 0;
+}
+
+strong {
+    color: #555;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+#historyContainer, #confirmationDetails {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+#remv-btn{
+position: relative;
+left: 88%;
+}
+
+.age{
+    width: 5%;
+}
+
+
+.gender{
+    width: 10%;
+}
+
+
+.index
+{
+
+color:white;
+text-align:center;
+}
+
+
+
+
+
+
+.index h1{
+color:blue;
+
+
+}
+
+.headline-box {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.8); /* White background with slight transparency */
+    margin-top:70px;
+    padding:5px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a shadow to the box */
+}
+
+
+
+

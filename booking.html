@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Booking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html"><B>Home</B></a></li>
+                <li><a href="trainsearch.html"><B>Train Search</B></a></li>
+                <li><a href="booking-history.html"><B>Booking History</B></a></li>
+            </ul>
+        </nav>
+
+        <h1>Ticket Booking</h1>
+        <div id="trainDetails"></div>
+
+        <form id="bookingForm" onsubmit="event.preventDefault(); storePassengerDetails();">
+            <div id="passengerContainer"></div>
+            <button type="button" onclick="addPassenger()"><B>Add Another Passenger</B></button>
+            <button type="submit"><B>Book Ticket(s)</B></button>
+        </form>
+
+        <button class="back-button" onclick="window.location.href='trainsearch.html'"><B>Back to Search</B></button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const selectedTrainString = localStorage.getItem("selectedTrain");
+            if (selectedTrainString) {
+                const trainDetailsArray = selectedTrainString.split(',');
+                const trainDetails = {};
+                trainDetailsArray.forEach(detail => {
+                    const [key, value] = detail.split(':');
+                    trainDetails[key.trim()] = value.trim();
+                });
+
+                document.getElementById("trainDetails").innerHTML = `
+                    <h2>Train: ${trainDetails.trainName}</h2>
+                    <p>Source: ${trainDetails.source}</p>
+                    <p>Destination: ${trainDetails.destination}</p>
+                    <p>Travel Date: ${trainDetails.date}</p>
+                    <p>Available Sleeper Seats: ${trainDetails.availableSleeper}</p>
+                    <p>Available AC Seats: ${trainDetails.availableAC}</p>
+                `;
+            }
+            addPassenger();
+        });
+
+        function addPassenger() {
+            const passengerContainer = document.getElementById("passengerContainer");
+            const passengerCount = document.querySelectorAll('.passenger').length;
+
+            const newPassenger = document.createElement("div");
+            newPassenger.classList.add("passenger");
+
+            newPassenger.innerHTML = `
+                <label for="passengerName">Passenger Name</label>
+                <input type="text" class="passengerName" required pattern="[A-Za-z ]+" title="Only letters and spaces allowed">
+
+                <label for="age">Age</label>
+                <input type="number" class="age" required min="1" max="100" title="Age must be between 1 and 100">
+
+                <label for="gender">Gender</label>
+                <select class="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="seatClass">Seat Class</label>
+                <select class="seatClass" required>
+                    <option value="sleeper">Sleeper</option>
+                    <option value="ac">AC</option>
+                </select>
+
+                <button id="remv-btn" type="button" ${passengerCount === 0 ? 'disabled' : ''} onclick="removePassenger(this)">Remove</button>
+                `;
+
+            passengerContainer.appendChild(newPassenger);
+        }
+
+        function removePassenger(button) {
+            const passenger = button.parentElement;
+            const passengerContainer = document.getElementById("passengerContainer");
+            passenger.remove();
+
+            const remainingPassengers = document.querySelectorAll('.passenger');
+            if (remainingPassengers.length === 1) {
+                remainingPassengers[0].querySelector("button").disabled = true;
+            }
+        }
+
+        function storePassengerDetails() {
+            const passengers = [];
+            const passengerDivs = document.querySelectorAll(".passenger");
+            passengerDivs.forEach(div => {
+                const name = div.querySelector('.passengerName').value;
+                const age = div.querySelector('.age').value;
+                const gender = div.querySelector('.gender').value;
+                const seatClass = div.querySelector('.seatClass').value;
+                const status = 'Confirmed'; 
+                passengers.push(`Name: ${name}, Age: ${age}, Gender: ${gender}, Seat Class: ${seatClass}, Status: ${status}`);
+            });
+
+            const trainDetailsString = localStorage.getItem("selectedTrain");
+            if (trainDetailsString) {
+                const trainDetailsArray = trainDetailsString.split(',');
+                if (trainDetailsArray.length >= 5) {
+                    const bookingDetails = `
+                Train: ${trainDetailsArray[0].split(':')[1].trim()}, 
+                Source: ${trainDetailsArray[1].split(':')[1].trim()}, 
+                Destination: ${trainDetailsArray[2].split(':')[1].trim()}, 
+                Date: ${trainDetailsArray[3].split(':')[1].trim()}, 
+                Passengers: ${passengers.join(' / ')}
+            `;
+
+                    const existingHistory = localStorage.getItem("bookingHistory") || "";
+                    localStorage.setItem("bookingHistory", existingHistory + bookingDetails + '|');
+
+                    localStorage.setItem("bookingDetails", bookingDetails.trim());
+                    alert("details added succesfully, redirecign to payment page.");
+                    window.open("payment.html", "_blank");
+                } else {
+                    alert("Error: Incomplete train details.");
+                }
+            } else {
+                alert("Error: Train details not found.");
+            }
+        }
+
+    </script>
+</body>
+
+</html>

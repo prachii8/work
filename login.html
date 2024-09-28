@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration</title>
+    <link rel="stylesheet" href="styles_main.css">
+</head>
+
+<body>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="form-container loginbg" >
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label for="loginUsername"><B>Username</B></label>
+            <input type="text" id="loginUsername" name="loginUsername" required>
+
+            <label for="loginPassword"><B>Password</B></label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+
+            <label for="portalType"><B>Login as</B></label>
+            <select id="portalType">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select><br>
+
+            <button type="button" onclick="login()">Login</button>
+            <p id="notreg"><B>Not registered?</B> <a href="javascript:showRegistration()">Register here</a></p>
+        </form>
+    </div>
+
+    <!-- Registration Page -->
+    <div id="registrationPage" class="form-container" style="display:none;">
+        <h2>Registration</h2>
+        <form id="registrationForm">
+            <label for="regUsername">Username (min 6 characters, letters only):</label>
+            <input type="text" id="regUsername" name="regUsername" required><br>
+
+            <label for="regPassword">Password (min 8 characters, must contain special char, number, upper case):</label>
+            <input type="password" id="regPassword" name="regPassword" required><br>
+
+            <label for="regConfirmPassword">Confirm Password:</label>
+            <input type="password" id="regConfirmPassword" name="regConfirmPassword" required><br>
+
+            <label for="regEmail">Email:</label>
+            <input type="email" id="regEmail" name="regEmail" required><br>
+
+            <label for="regMobile">Mobile (10 digits):</label>
+            <input type="text" id="regMobile" name="regMobile" required><br>
+
+            <label for="regAadhar">Aadhar (12 digits):</label>
+            <input type="text" id="regAadhar" name="regAadhar" required><br>
+
+            <label for="regRole">Register as:</label>
+            <select id="regRole">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select><br><br>
+
+            <button type="button" onclick="register()">Register</button>
+        </form>
+    </div>
+    <!-- Admin Portal -->
+    <div id="adminPortal" class="admin-container" style="display:none;">
+        <h2>Admin Portal</h2>
+        <nav>
+            <button onclick="showAdminHome()">Home</button>
+            <button onclick="showRegisterTrain()">Register a Train</button>
+            <button onclick="showAdminProfile()">Profile</button>
+            <button onclick="logout()">Logout</button>
+        </nav>
+
+        <!-- Admin Home Page -->
+        <div id="adminHomePage" class="admin-content">
+            <h3>Home - Ticket Sales and Customer Data</h3>
+            <h4>Aggregate Table (Tickets Booked Per Class / Sales per Quarter)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Number of Tickets</th>
+                        <th>Sales (Quarterly)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>First Class</td>
+                        <td>120</td>
+                        <td>&#8377;10,000</td>
+                    </tr>
+                    <tr>
+                        <td>Second Class</td>
+                        <td>240</td>
+                        <td>&#8377;15,000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Customer Data</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Tickets Booked</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>1234567890</td>
+                        <td>3</td>
+                        <td><button>Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Register a Train Page -->
+        <div id="registerTrainPage" class="admin-content" style="display:none;">
+            <h3>Register a Train</h3>
+            <form id="trainForm">
+                <label for="trainName">Train Name:</label>
+                <input type="text" id="trainName" required><br>
+
+                <label for="trainSeats">Number of Seats:</label>
+                <input type="number" id="trainSeats" required><br>
+
+                <label for="trainFrom">From:</label>
+                <input type="text" id="trainFrom" required><br>
+
+                <label for="trainTo">To:</label>
+                <input type="text" id="trainTo" required><br>
+
+                <label for="trainOwnership">Ownership:</label>
+                <input type="text" id="trainOwnership" required><br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Admin Profile Page -->
+        <div id="adminProfilePage" class="admin-content" style="display:none;">
+            <h3>Admin Profile</h3>
+            <form id="updateProfileForm">
+                <label for="profileUsername">Username:</label>
+                <input type="text" id="profileUsername"><br>
+
+                <label for="profilePassword">Password:</label>
+                <input type="password" id="profilePassword"><br>
+
+                <label for="profileMobile">Mobile:</label>
+                <input type="text" id="profileMobile"><br>
+
+                <label for="profileEmail">Email:</label>
+                <input type="email" id="profileEmail"><br>
+
+                <button type="button" onclick="updateProfile()">Update Profile</button>
+                <button type="button" onclick="deleteProfile()">Delete Profile</button>
+            </form>
+        </div>
+    </div>
+    <!-- Customer Portal -->
+    <div id="customerPortal" style="display:none;">
+        <h2>Welcome to the Customer Portal</h2>
+        <div class="tabs">
+            <button onclick="showTab('home')">Home</button>
+            <button onclick="showTab('bookTicket')">Book Ticket</button>
+            <button onclick="showTab('viewTickets')">View Tickets</button>
+            <button onclick="showTab('updateDetails')">Update Details</button>
+            <button onclick="window.location.href='trainsearch.html'">Sprint 1</button>
+
+
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Home - Aggregate Table -->
+        <div id="homeTab" class="tab-content">
+            <h3>Aggregate Table</h3>
+            <table border="1">
+                <tr>
+                    <th>Class</th>
+                    <th>Tickets Booked</th>
+                    <th>Sales Done (Per Quarter)</th>
+                </tr>
+                <tr>
+                    <td>First Class</td>
+                    <td>30</td>
+                    <td>&#8377;3000</td>
+                </tr>
+                <tr>
+                    <td>A.C Tier 1</td>
+                    <td>50</td>
+                    <td>&#8377;5000</td>
+                </tr>
+                <tr>
+                    <td>A.C Tier 2</td>
+                    <td>20</td>
+                    <td>&#8377;2000</td>
+                </tr>
+                <tr>
+                    <td>Tatkal</td>
+                    <td>10</td>
+                    <td>&#8377;1000</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Book Ticket -->
+        <div id="bookTicketTab" class="tab-content">
+            <h3>Book Ticket</h3>
+            <form id="bookTicketForm">
+                <label for="ticketId">Ticket ID (auto-populated):</label>
+                <input type="text" id="ticketId" name="ticketId" readonly><br>
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br>
+
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobile" name="mobile" required><br>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required><br>
+
+                <label for="date">Boarding Date:</label>
+                <input type="date" id="date" name="date" required><br>
+
+                <label for="boardingStation">Boarding Station:</label>
+                <input type="text" id="boardingStation" name="boardingStation" required><br>
+
+                <label for="destinationStation">Destination Station:</label>
+                <input type="text" id="destinationStation" name="destinationStation" required><br>
+
+                <label for="ticketCategory">Ticket Category:</label>
+                <select id="ticketCategory" name="ticketCategory">
+                    <option value="First Class">First Class</option>
+                    <option value="A.C Tier 1">A.C Tier 1</option>
+                    <option value="A.C Tier 2">A.C Tier 2</option>
+                    <option value="Tatkal">Tatkal</option>
+                </select><br>
+
+                <label for="trainId">Train ID:</label>
+                <input type="text" id="trainId" name="trainId" required><br>
+
+                <label for="trainName">Train Name:</label>
+                <input type="text" id="trainName" name="trainName" required><br>
+
+                <label for="tickets">Number of Tickets:</label>
+                <input type="number" id="tickets" name="tickets" required><br>
+
+                <button type="button" onclick="bookTicket()">Submit</button>
+            </form>
+        </div>
+
+        <!-- Booking Confirmation -->
+        <div id="bookingConfirmationTab" class="tab-content">
+            <h3>Booking Confirmation</h3>
+            <p id="bookingDetails"></p>
+            <button onclick="showTab('home')">Back to Home</button>
+        </div>
+
+        <!-- View Tickets -->
+        <div id="viewTicketsTab" class="tab-content">
+            <h3>Your Tickets</h3>
+            <table border="1" id="ticketsTable">
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Train ID</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Boarding Station</th>
+                    <th>Destination Station</th>
+                    <th>Boarding Date & Time</th>
+                    <th>Arrival Date & Time</th>
+                    <th>Tickets Bought</th>
+                    <th>Cancel Ticket</th>
+                </tr>
+		<tr>
+                  <td>101</td>
+                  <td>27928</td>
+                  <td>12122</td>
+                  <td>Kishan</td>
+                  <td>Borivali</td>
+                  <td>Thane</td>
+                  <td>29th Sept 7:00</td>
+                  <td>29th Sept 8:30</td>
+                  <td>1</td>
+                  <td>0</td>
+                </tr>
+		<tr>
+                  <td>102</td>
+                  <td>27928</td>
+                  <td>12122</td>
+                  <td>Prachite</td>
+                  <td>Panvel</td>
+                  <td>Thane</td>
+                  <td>29th Sept 7:00</td>
+                  <td>29th Sept 8:30</td>
+                  <td>1</td>
+                  <td>0</td>
+                </tr>
+<tr>
+                  <td>103</td>
+                  <td>27928</td>
+                  <td>12122</td>
+                  <td>Gouresh</td>
+                  <td>Airoli</td>
+                  <td>Thane</td>
+                  <td>29th Sept 7:00</td>
+                  <td>29th Sept 8:30</td>
+                  <td>1</td>
+                  <td>0</td>
+                </tr>
+
+                <!-- Tickets will be dynamically populated -->
+            </table>
+        </div>
+
+        <!-- Update Details -->
+        <div id="updateDetailsTab" class="tab-content">
+            <h3>Update Your Details</h3>
+            <form id="updateDetailsForm">
+                <label for="updateEmail">Email:</label>
+                <input type="email" id="updateEmail" name="updateEmail"><br>
+
+                <label for="updateMobile">Mobile:</label>
+                <input type="text" id="updateMobile" name="updateMobile"><br>
+
+                <label for="updateAddress">Address:</label>
+                <input type="text" id="updateAddress" name="updateAddress"><br>
+
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword" name="currentPassword"><br>
+
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword"><br>
+
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword"><br>
+
+                <button type="button" onclick="updateDetails()">Update</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
